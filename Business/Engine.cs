@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Business
 {
@@ -9,10 +10,12 @@ namespace Business
 
     public class Engine : IEngine
     {
+        private readonly IBusinessService _businessService;
         private readonly Guid _workerId;
 
-        public Engine()
+        public Engine(IBusinessService businessService)
         {
+            _businessService = businessService;
             _workerId = Guid.NewGuid();
         }
 
@@ -20,10 +23,13 @@ namespace Business
         {
             Console.WriteLine("I am working. My id is {0}.", _workerId);
 
-            Console.WriteLine("  Step 1: ");
+            var values = _businessService.GetValues();
+            var enumerable = values as string[] ?? values.ToArray();
+
+            Console.WriteLine("  Step 1: " + enumerable.First());
             System.Threading.Thread.Sleep(1000);
 
-            Console.WriteLine("  Step 2: ");
+            Console.WriteLine("  Step 2: " + enumerable.Last());
             System.Threading.Thread.Sleep(1000);
         }
     }
