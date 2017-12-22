@@ -16,11 +16,16 @@ namespace WebApi
 
             builder.RegisterType<BusinessService>().As<IBusinessService>().InstancePerRequest();
 
+            // This is the registration needed if the need to be available in different scopes:
+            // https://github.com/HangfireIO/Hangfire.Autofac
+            builder.RegisterType<Engine>().As<IEngine>().InstancePerRequest(AutofacJobActivator.LifetimeScopeTag);
+
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             var container = builder.Build();
 
             System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            GlobalConfiguration.Configuration.UseAutofacActivator(container);
 
             // Hangfire configuration
             GlobalConfiguration.Configuration.UseSqlServerStorage("DbContext");

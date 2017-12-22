@@ -18,10 +18,8 @@ namespace WebApi.Controllers
         // GET api/values
         public IEnumerable<string> Get()
         {
-            // Simple call to the engine via Hangfire without any DI
-            var engine = new Engine();
-
-            BackgroundJob.Enqueue(() => engine.DoWork());
+            // Simple call to the engine via Hangfire with DI
+            BackgroundJob.Enqueue<IEngine>(x => x.DoWork());
 
             var values = _businessService.GetValues();
 
