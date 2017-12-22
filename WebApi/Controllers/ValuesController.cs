@@ -6,12 +6,12 @@ namespace WebApi.Controllers
 {
     public class ValuesController : ApiController
     {
-        // using Business Service without Dependency Injection
-        private readonly BusinessService _businessService;
+        // using Business Service with Dependency Injection
+        private readonly IBusinessService _businessService;
 
-        public ValuesController()
+        public ValuesController(IBusinessService businessService)
         {
-            _businessService = new BusinessService();
+            _businessService = businessService;
         }
 
         // GET api/values
