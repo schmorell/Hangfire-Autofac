@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Business;
+using Hangfire;
 
 namespace WebApi.Controllers
 {
@@ -17,6 +18,11 @@ namespace WebApi.Controllers
         // GET api/values
         public IEnumerable<string> Get()
         {
+            // Simple call to the engine via Hangfire without any DI
+            var engine = new Engine();
+
+            BackgroundJob.Enqueue(() => engine.DoWork());
+
             var values = _businessService.GetValues();
 
             return values;
