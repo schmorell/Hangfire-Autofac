@@ -1,18 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
+using Business;
 
 namespace WebApi.Controllers
 {
     public class ValuesController : ApiController
     {
+        // using Business Service without Dependency Injection
+        private readonly BusinessService _businessService;
+
+        public ValuesController()
+        {
+            _businessService = new BusinessService();
+        }
+
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            var values = _businessService.GetValues();
+
+            return values;
         }
 
         // GET api/values/5
